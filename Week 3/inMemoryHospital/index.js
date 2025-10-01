@@ -2,6 +2,10 @@ const express = require('express');
 
 const app = express();
 
+function middleware(req, res, next) {
+    
+}
+
 app.get('/health-checkup', function(req, res) {
     const username = req.headers.username;
     const password = req.headers.password;

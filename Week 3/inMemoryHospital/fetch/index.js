@@ -1,43 +1,30 @@
 const express = require("express")
 const jwt = require("jsonwebtoken")
+const mongoose = require("mongoose")
 const jwtPassword = "123456";
+
 
 const app = express();
 app.use(express.json()) // Throws Error for Body contents
 
-const ALL_USERS = [
-    {
-        username: "Vaibhav@gmail.com",
-        password: "123",
-        name: "Vaibhav Sonawane"
-    },
-    {
-        username: "Harkirat@gmail.com",
-        password: "456",
-        name: "Harkirat Singh"
-    },
-    {
-        username: "Milind@gmail.com",
-        password: "789",
-        name: "Milind Sonawane"
-    }
-]
+mongoose.connect("mongodb+srv://admin-devs:Duggu%401308@100x-devs-db.iugbonm.mongodb.net/user_app")
 
-function userExists(username, password) {
+const User = mongoose.model("users", {username: String, password: String, name: String});
+
+function userExists(username, existingUsers) {
     let userExist = false;
-    for(let i = 0; i < ALL_USERS.length; i++){
-        if(username == ALL_USERS[i].username && password == ALL_USERS[i].password){
+    for(let i = 0; i < existingUsers.length; i++){
+        if(username == existingUsers[i].username){
             userExist = true
         }
     }
     return userExist;
 }
 
-app.post("/singin", function(req, res) {
+app.post("/singin", async function(req, res) {
     const username = req.body.username;
-    const password = req.body.password;
-
-    if(!userExists(username, password)) {
+    const existingUsers = await User.find()
+    if(!userExists(username, existingUsers)) {
         return res.status(403).json({
             msg: "User doesnt exists in our in memory db"
         });
@@ -49,14 +36,41 @@ app.post("/singin", function(req, res) {
     });
 })
 
-app.get("/users", function(req, res) {
+app.post("/singup", async function(req, res) {
+    const username = req.body.username
+    const password = req.body.password
+    const name = req.body.name
+    const existingUsers = await User.find()
+    
+    if(!userExists(username, existingUsers)) {
+        const newUser = new User({
+            "username": username,
+            "password": password,
+            "name": name
+        })
+
+        newUser.save().then(function(){
+            res.json({
+                msg: "New user Added"
+            })
+        })
+    } else {
+        res.json({
+            msg: "User already exists"
+        })
+    }
+})
+
+app.get("/users", async function(req, res) {
     const token = req.headers.authorization;
+    const existingUsers = await User.find()
 
     try {
         const decoded = jwt.verify(token, jwtPassword);
         const username = decoded.username;
+        
         res.json({
-            users: ALL_USERS.filter(function(value){
+            users: existingUsers.filter(function(value){
                 if(value.username == username) {
                     return false;
                 } else {

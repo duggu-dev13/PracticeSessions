@@ -7,7 +7,7 @@ const jwtPassword = "123456";
 const app = express();
 app.use(express.json()) // Throws Error for Body contents
 
-mongoose.connect("mongodb+srv://admin-devs:Duggu%401308@100x-devs-db.iugbonm.mongodb.net/user_app")
+mongoose.connect("YOUR MONGODB CONNECTION STRING");
 
 const User = mongoose.model("users", {username: String, password: String, name: String});
 

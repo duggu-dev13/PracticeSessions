@@ -1,12 +1,21 @@
+<!-- The issue in this code is that the API does not have the our scehma so thats why you get this Jargon evrywhere. you can modify the code as per your relevence -->
+
 <!DOCTYPE html>
 <body>
-    <script>
-        let globalID = 0;
+    <div>
+        <input type="text" id="title" placeholder="Title">
+        <input type="text" id="description" placeholder="description">
+        <!-- <button onclick="addTodo()">Add Todo</button> -->
+        <div id="container"></div>
+    </div>
 
-        function markAsDone(id) {
-            const completeTodo = document.getElementById(id);
-            completeTodo.children[2].innerHTML = "Done!";
-        }
+    <script>
+        // let globalID = 0;
+
+        // function markAsDone(id) {
+        //     const completeTodo = document.getElementById(id);
+        //     completeTodo.children[2].innerHTML = "Done!";
+        // }
 
         function createTodo(title, description, globalID) {
             const child = document.createElement("Div");
@@ -15,18 +24,17 @@
             firstGrandChild.innerHTML = title
             const secondGrandChild = document.createElement("div");
             secondGrandChild.innerHTML = description
-            const thirdGrandChild = document.createElement("button");
-            thirdGrandChild.innerHTML = "Mark as Done!";
-            thirdGrandChild.setAttribute("onClick", `markAsDone(${globalID})`);
+            // const thirdGrandChild = document.createElement("button");
+            // thirdGrandChild.innerHTML = "Mark as Done!";
+            // thirdGrandChild.setAttribute("onClick", `markAsDone(${globalID})`);
 
             child.appendChild(firstGrandChild);
             child.appendChild(secondGrandChild);
-            child.appendChild(thirdGrandChild);
+            // child.appendChild(thirdGrandChild);
             child.setAttribute("id", globalID);
             return child
         }
         
-
         function addTodo() {
             const title = document.getElementById("title").value;
             const description = document.getElementById("description").value;
@@ -34,12 +42,35 @@
 
             container.appendChild(createTodo(title, description, globalID++));
         } 
+
+        function updateDomAccToState(state) {
+            const parent = document.getElementById("container");
+            parent.innerHTML = "";
+
+            for(let i=0; i<state.length; i++) {
+                const child = createTodo(state[i].id, state[i].todo, state[i].completed);
+                parent.appendChild(child);
+            }
+        }
+
+        window.setInterval(async function() {
+            const res = await fetch("https://dummyjson.com/todos");
+            const json = await res.json();
+
+            updateDomAccToState(json.todos)
+        }, 5000)
+        
+
+        // updateDomAccToState([{
+        //     title: "New bag",
+        //     description: "Buy a new bag",
+        //     id: 5,
+        // },{
+        //     title: "New bag",
+        //     description: "Buy a new bag",
+        //     id: 5,
+        // },])
     </script>
-    <div>
-        <input type="text" id="title" placeholder="Title">
-        <input type="text" id="description" placeholder="description">
-        <button onclick="addTodo()">Add Todo</button>
-        <div id="container"></div>
-    </div>
+    
 </body>
 </html>

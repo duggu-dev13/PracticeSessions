@@ -11,7 +11,7 @@ export function CreateTodo() {
             }
         }/><br />
         
-        <input id="desc" style={{padding: 10, margin: 10 }}  type="text" placeholder="description" 
+        <input id="desc" style={{padding: 10, margin: 10 }}  type="text" placeholder="descriptions" 
         onChange={
             function(e) {
                 const value = e.target.value;
@@ -21,7 +21,7 @@ export function CreateTodo() {
 
         <button style={{padding: 10, margin: 10 }} onClick={
             () => {
-                fetch("http://localhost:3000/todo",{
+                fetch("http://localhost:3000/todos",{
                     method: "POST",
                     body: JSON.stringify({
                         title: title,

@@ -2,46 +2,57 @@ import { useState, memo } from 'react';
 import './App.css'
 
 function App() {
-
-  const [todos , setTodos] =useState([{
-    id: 1,
-    title:"Play Games 1",
-    desc: "Play the diablo game 1"
-  }, {
-    id: 2,
-    title:"Play Games 2",
-    desc: "Play the diablo game 2"
-  }, {
-    id: 3,
-    title:"Play Games 3",
-    desc: "Play the diablo game 3"
-  }])
-
-  function newTodo() {
-    setTodos([...todos, {
-        id: todos.length + 1,
-        title: "Play Games " + (todos.length + 1), 
-        desc: "Play the diablo game " + (todos.length + 1),
-      }]
-    );
-  }
-  
   return (
     <>
-    <button onClick={newTodo}>Add todo</button>
-    {todos.map(todo => <Todo key={todo.id} title={todo.title} desc={todo.desc} />)}
+      <CardWrappper>
+        <Texts />
+        <Texts />
+      </CardWrappper>
+
+      <CardWrappper>
+        <Texts />
+        <Texts />
+        <Texts />
+        <Texts />
+      </CardWrappper>
+
+      {/* <CardWrappper innerCommpoenent={<TextComponent1 />} /> */}
     </>
   )
 }
 
-function Todo({title, desc}) {
+function CardWrappper({children}){
+  console.log(children)
+  return (
+    <div style={{border: '1px solid black', padding: '20px', margin: '20px'}}>
+      {children}
+    </div>
+  )
+}
+
+function Texts(){
   return (
     <>
-    <h1>{title}</h1>
-    <h5>{desc}</h5>
+      <h3>Hii there</h3>
     </>
   )
 }
+
+// function TextComponent() {
+//   return (
+//     <>
+//       <h1>hi there</h1>
+//     </>
+//   )
+// }
+
+// function TextComponent1() {
+//   return (
+//     <>
+//       <h1>hi there hi therererere</h1>
+//     </>
+//   )
+// }
 
 
 export default App

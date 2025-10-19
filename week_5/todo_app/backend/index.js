@@ -11,7 +11,7 @@ app.use(cors({
     origin: "http://localhost:5173"
     }))
 
-app.post("/todos", async function(req, res) {
+app.post("/todo", async function(req, res) {
     const createPayLoad = req.body;
     const parsedPayLoad = createTodo.safeParse(createPayLoad);
 
@@ -33,9 +33,9 @@ app.post("/todos", async function(req, res) {
     })
 });
 
-app.get("/todo", async function(req, res) {
+app.get("/todos", async function(req, res) {
     const todos = await todo.find();
-    console.log(todos)
+    // console.log(todos)
     res.json({
         todos
     })
@@ -50,8 +50,8 @@ app.put("/completed", async function(req, res) {
         })
         return;
     }
-    await todo.update({
-        _id: res.body._id
+    await todo.findByIdAndUpdate({
+        _id: updatePayLoad._id
     }, {
         completed: true
     })

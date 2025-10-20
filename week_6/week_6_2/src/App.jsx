@@ -1,29 +1,30 @@
-import { useState, useEffect, useMemo } from 'react'
+import { memo, useCallback, useState } from 'react';
 import './App.css'
 
 function App() {
-  const [counter, setCounter] = useState(0);
-  const [inputValue, setinputValue] = useState(1);
+  const [count ,setCount] = useState(0);
+  
+  // useCallback will return a memoized version of the callback that only changes if one of the dependencies has changed. or in simple way it will remember the function reference  
+  const inputFunction = useCallback(() => {
+    console.log("Button Clicked");
+  }, [])
 
-  let count = useMemo(() => { 
-    let finalCount = 0;
-    for (let i = 1; i <= inputValue; i++){
-      finalCount = finalCount + i;
-    }
-    return finalCount;
-  }, [inputValue]);
   return (
     <>
-      <input onChange={(e)=> {
-        setinputValue(e.target.value)
-      }} placeholder='Find the sum from 1 to n'/>
-      <h4>The sum from 1 to {inputValue} is {count}</h4>
+      <ButtonComponent inputFunction={inputFunction}></ButtonComponent> <br />
       <button onClick={() => {
-        setCounter(counter + 1)
-      }}>Counter ({counter})</button>
+        setCount(count + 1);
+      }}>Counter {count}</button>
     </>
   )
 }
 
+const ButtonComponent = memo(({inputFunction}) => {
+  console.log("Child rendered");
+
+  return (
+    <button onClick={inputFunction}>Click Me</button>
+  )
+})
 
 export default App

@@ -1,26 +1,20 @@
-import { memo, useCallback, useEffect, useState } from 'react';
+import {useEffect, useRef, useState } from 'react';
 import './App.css'
-import axios from 'axios';
 
-// Its a demo tamplete for custome hooks
-function useTodo() {
-  const [todos, setTodos] = useState([]);
-
-  useEffect(() => {
-    axios.get('/api/todos').then((response) => {
-      setTodos(response.data);
-    });
-  }, [])
-
-  return todos;
-}
-
+// Simple example of useRef to access a DOM element and modify it after 5 seconds
 
 function App() {
-const todos = useTodo();
+  const [incomeTax, setIncomeTax] = useState(2000);
+  const divRef = useRef(); 
+  useEffect(() => {
+    setTimeout(() => {
+        console.log(divRef.current);
+        divRef.current.innerHTML = 10;
+      }, 5000);
+  }, []);
   return (
     <>
-    {todos}
+  Hi there your income tax returns are <div ref={divRef}>{incomeTax}</div>
     </>
   )
 }

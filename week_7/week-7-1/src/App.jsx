@@ -1,42 +1,49 @@
-import {BrowserRouter, Route, Routes, useNavigate} from 'react-router-dom'  ;
-import { lazy, Suspense } from 'react';
+import { useContext, useState } from 'react';
+import { CountContext } from './context';
 import './App.css';
 
-const Dashboard = lazy(() => import('./components/Dashboard'));
-const Landing = lazy(() => import('./components/Landing'));
-// lazy loading will load the component only when it is needed. This is small way to optimisation in react websites.
-
 function App() {
-  
+  const [count, setCount] = useState(0)   
   return (
     <>
-      <BrowserRouter>
-       <AppBar />
-        <Routes>
-          <Route path="/" element={<Suspense fallback="...Loading"><Landing /></Suspense>} />
-          <Route path="/dashboard" element={<Suspense fallback="...Loading"><Dashboard /></Suspense>} />
-          {/* used suspense to wrap lazy loaded components to show fallback content while the component is being loaded. */}
-          
-        </Routes>
-      </BrowserRouter>
+    {/* Wrap context that wants to use the teleported value inside the Provide. */}
+      <CountContext.Provider value={count}>
+        <Count setCount={setCount}></Count>
+      </CountContext.Provider>
     </>
   )
 }
 
-function AppBar() {
-
-  const navigate = useNavigate();
-
+function Count({setCount}) {
   return (
-    <div>
+    <>
+      <CountRender /> <br/>
+      <Buttons setCount={setCount}></Buttons>
+    </>
+  )
+}
+
+function CountRender() {
+  const count = useContext(CountContext);
+  return (
+    <>
+      {count}
+    </>
+  )
+}
+
+function Buttons({setCount}) {
+  const count = useContext(CountContext);
+  return (
+    <>
       <button onClick={() => {
-        navigate("/");
-      }}>Landing</button>  
+        setCount(count + 1)
+      }}>Count +</button>
       
       <button onClick={() => {
-        navigate("/dashboard");
-      }}>Dashboard</button>
-      </div>
+        setCount(count - 1)
+      }}>Count -</button>
+    </>
   )
 }
 

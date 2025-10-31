@@ -4,17 +4,23 @@ import './App.css';
 
 function App() {
   const [count, setCount] = useState(0)   
+
+  const contextProps = {
+    count, 
+    setCount
+  }
   return (
     <>
     {/* Wrap context that wants to use the teleported value inside the Provide. */}
-      <CountContext.Provider value={count}>
-        <Count setCount={setCount}></Count>
+      <CountContext.Provider value={contextProps}>
+        <Count></Count>
       </CountContext.Provider>
     </>
   )
 }
 
-function Count({setCount}) {
+function Count() {
+  const setCount = useContext(CountContext);
   return (
     <>
       <CountRender /> <br/>
@@ -24,7 +30,7 @@ function Count({setCount}) {
 }
 
 function CountRender() {
-  const count = useContext(CountContext);
+  const {count} = useContext(CountContext);
   return (
     <>
       {count}
@@ -32,8 +38,8 @@ function CountRender() {
   )
 }
 
-function Buttons({setCount}) {
-  const count = useContext(CountContext);
+function Buttons() {
+  const {count, setCount} = useContext(CountContext);
   return (
     <>
       <button onClick={() => {

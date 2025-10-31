@@ -1,8 +1,8 @@
 import {BrowserRouter, Route, Routes, useNavigate} from 'react-router-dom'  ;
-import Landing from './components/Landing';
 import './App.css';
 
 const Dashboard = React.lazy(() => import('./components/Dashboard'));
+const Landing = React.lazy(() => import('./components/Landing'));
 // lazy loading will load the component only when it is needed. This is small way to optimisation in react websites.
 
 function App() {
